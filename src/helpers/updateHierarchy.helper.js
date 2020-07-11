@@ -152,12 +152,7 @@ class HierarchyService {
     data["openForContribution"] = openForContribution;
 
     _.forEach(data.children, child => {
-      // if (
-        // child.contentType === "TextBookUnit" ||
-        // child.contentType === "TextBook"
-      // ) {
         instance.openForContribution(child, openForContribution);
-      // }
     });
   }
 
@@ -173,7 +168,6 @@ class HierarchyService {
     };
 
     _.forEach(response.content.children, child => {
-      // if ( child.contentType === "TextBookUnit" || child.contentType === "TextBook") {
         let cindex = children.findIndex(item => item.id === child.identifier);
 
         if (cindex !== -1) {
@@ -182,7 +176,6 @@ class HierarchyService {
         else {
           instance.openForContribution(child, false);
         }
-      // }
     });
 
     // console.log(JSON.stringify( instance.getFlatNodesModified(response.content,additionalMetaData,children)  ));
