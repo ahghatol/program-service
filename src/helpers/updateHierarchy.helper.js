@@ -167,10 +167,14 @@ class HierarchyService {
       isFirstTime: true
     };
 
-    _.forEach(response.content.children, child => {
+    // Set textbook allow to open for contribution
+    response.content['openForContribution'] = true;
+
+    _.forEach(response.content.children, (child, i) => {
         let cindex = children.findIndex(item => item.id === child.identifier);
 
         if (cindex !== -1) {
+          // Set chapter Hierarchy openForContribution
           instance.openForContribution(child, true);
         }
         else {
