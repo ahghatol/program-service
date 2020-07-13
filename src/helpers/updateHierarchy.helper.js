@@ -169,12 +169,13 @@ class HierarchyService {
 
     // Set textbook allow to open for contribution
     response.content['openForContribution'] = true;
+    let chapterCountForContribution = 0;
 
     _.forEach(response.content.children, (child, i) => {
         let cindex = children.findIndex(item => item.id === child.identifier);
 
         if (cindex !== -1) {
-          // Set chapter Hierarchy openForContribution
+          ++chapterCountForContribution;
           instance.openForContribution(child, true);
         }
         else {
@@ -182,7 +183,7 @@ class HierarchyService {
         }
     });
 
-    // console.log(JSON.stringify( instance.getFlatNodesModified(response.content,additionalMetaData,children)  ));
+    response.content['chapterCountForContribution'] = chapterCountForContribution;
 
     return {
       nodesModified: instance.getFlatNodesModified(
