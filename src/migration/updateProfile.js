@@ -19,12 +19,14 @@ async function updateUsersProfiles() {
     });
 
     const { results, errors } = await PromisePool
-    .withConcurrency(2)
+    .withConcurrency(10)
     .for(nominations)
     .process(async nomination => {
         const user = await updateUser(nomination);
         return user
     });
+
+    console.log(results);
 }
 
 async function updateUser(nomination) {
@@ -100,15 +102,12 @@ async function updateMSG(user, program_id) {
     return axios(option);
 }
 
-updateUsersProfiles().
-    then( res => {
-        if (failedUpdateUsersId.length) {
-            console.log("*********** Update failed for these users ids **** \n", failedUpdateUsersId);
-        }
-    }, err =>{
-        console.log(err);
+updateUsersProfiles()
+.then( res => {
+    if (failedUpdateUsersId.length) {
+        console.log("*********** Update failed for these users ids **** \n", failedUpdateUsersId);
     }
-).catch(err => {
+}).catch(err => {
     console.log(err);
 });
 
