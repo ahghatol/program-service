@@ -673,6 +673,7 @@ describe('Program Service', () => {
   })
 
   // eslint-disable-next-line no-undef
+  /*
   it('it should get program details', (done) => {
     const programDetails = {request: {filters: {program_id: [programId2]}} }
     dummyData.getCollectionWithProgramId.request.filters.programId = programId2;
@@ -792,7 +793,7 @@ describe('Program Service', () => {
         done()
       })
   });
-
+  */
   // eslint-disable-next-line no-undef
   it('it should not download nomination list details', (done) => {
     const programDetails = {request: {filters: {program_id: programId, program_name: 'Test case', status: 'Pending'}} }
@@ -813,6 +814,7 @@ describe('Program Service', () => {
       })
   })
 
+  /*
   // eslint-disable-next-line no-undef
   it('it should download nomination list details', (done) => {
     const programDetails = {request: {filters: {program_id: programId, program_name: 'Test case', status: 'Pending'}} }
@@ -860,7 +862,7 @@ describe('Program Service', () => {
         done()
       })
   })
-
+  */
   it('Sort the program by medium, gradeLevel and subject', (done) => {
     chai.request(app)
       .post(BASE_URL + '/list')
