@@ -1,0 +1,47 @@
+version: 2.1
+
+# Define the jobs we want to run for this project
+jobs:
+  build:
+    docker:
+      - image: circleci/classic:latest
+    steps:
+      - checkout
+      - run: /bin/bash -x build.sh
+  test:
+    working_directory: ~/program-service/src
+    docker:
+      - image: circleci/classic:latest
+    steps:
+      - checkout
+          path: ~/program-service
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Remove Package Lock
+          command: 'rm -f package-lock.json' 
+      - run:
+          name: Installing npm deps
+          command: 'npm install'
+      - save_cache: # special step to save the dependency cache
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths: ./node_modules
+      - run:
+          name: make directory & ng lint
+          command: 'mkdir -p /tmp/logs'
+      - run:
+          name: Executing test cases
+          command: 'npm run test-with-coverage | tee /tmp/logs/test_cases.log'
+      - run:
+          name: install sonar scanner
+          command: npm install -g sonarqube-scanner
+      - run:
+         name: run sonar scanner
+         command: 'cd ~/program-service/src && sonar-scanner'
+
+# Orchestrate our job run sequence
+workflows:
+  build_and_test:
+    jobs:
+      - build
+      - test
