@@ -38,6 +38,8 @@ jobs:
          name: run sonar scanner
          command: 'cd ~/program-service/src && sonar-scanner'
 
+orbs:
+  node: circleci/node@13.10.1
 # Orchestrate our job run sequence
 workflows:
   build_and_test:
