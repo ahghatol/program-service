@@ -19,6 +19,7 @@ jobs:
           command: 'npm i npm@latest -g'
       - node/install:
           install-yarn: true
+          version: 13.10.1
       - run: node --version
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
