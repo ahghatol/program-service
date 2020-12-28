@@ -10,7 +10,6 @@ jobs:
     docker:
       - image: cimg/node:13.14.0
     steps:
-      - run: node --version
       - checkout:
           path: ~/program-service
       - run: git submodule sync
