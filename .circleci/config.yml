@@ -18,6 +18,7 @@ jobs:
           name: Installing npm
           command: 'npm i npm@latest -g'
       - run: node --version
+      - run: nvm ls
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
