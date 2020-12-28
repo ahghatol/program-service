@@ -8,7 +8,7 @@ jobs:
   test:
     working_directory: ~/program-service/src
     docker:
-      - image: sunbird/build:player
+      - image: cimg/node:13.14.0
     steps:
       - checkout:
           path: ~/program-service
