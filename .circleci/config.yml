@@ -19,8 +19,6 @@ jobs:
           command: 'npm i npm@latest -g'
       - node/install:
           install-yarn: true
-      - run: nvm ls
-      - run: nvm use 15
       - run: node --version
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
@@ -38,7 +36,7 @@ jobs:
           command: 'mkdir -p /tmp/logs'
       - run:
           name: Executing test cases
-          command: 'nvm use 15 && npm run test-with-coverage | tee /tmp/logs/test_cases.log'
+          command: 'npm run test-with-coverage | tee /tmp/logs/test_cases.log'
       - run:
           name: install sonar scanner
           command: npm install -g sonarqube-scanner
@@ -53,3 +51,7 @@ workflows:
   build_and_test:
     jobs:
       - test
+          matrix:
+            parameters:
+              version:
+                - 13.11.0
