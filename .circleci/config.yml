@@ -1,54 +1,53 @@
 version: 2.1
 jobs:
   build:
-    docker:
-      image: cimg/node:13.11.0
+    machine:
+      image: circleci/classic:latest
     steps:
-      - run: node --version
+      - checkout
   test:
     working_directory: ~/program-service/src
     docker:
       - image: sunbird/build:player
     steps:
-      - run: node --version
-      #~ - checkout:
-          #~ path: ~/program-service
-      #~ - run: git submodule sync
-      #~ - run: git submodule update --init
+      - checkout:
+          path: ~/program-service
+      - run: git submodule sync
+      - run: git submodule update --init
       #~ - run:
           #~ name: Installing npm
           #~ command: 'npm i npm@latest -g'
-      #~ - node/install:
-          #~ install-yarn: true
-          #~ version: 13.10.1
-      #~ - run: node --version
-      #~ - restore_cache:
-          #~ key: dependency-cache-{{ checksum "package.json" }}
-      #~ - run:
-          #~ name: Remove Package Lock
-          #~ command: 'rm -f package-lock.json' 
-      #~ - run:
-          #~ name: Installing npm deps
-          #~ command: 'npm install'
-      #~ - save_cache: # special step to save the dependency cache
-          #~ key: dependency-cache-{{ checksum "package.json" }}
-          #~ paths: ./node_modules
-      #~ - run:
-          #~ name: make directory & ng lint
-          #~ command: 'mkdir -p /tmp/logs'
-      #~ - run:
-          #~ name: Executing test cases
-          #~ command: 'npm run test-with-coverage | tee /tmp/logs/test_cases.log'
-      #~ - run:
-          #~ name: install sonar scanner
-          #~ command: npm install -g sonarqube-scanner
-      #~ - run:
-         #~ name: run sonar scanner
-         #~ command: 'cd ~/program-service/src && sonar-scanner'
+      - node/install:
+          install-yarn: true
+      - run: node --version
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Remove Package Lock
+          command: 'rm -f package-lock.json' 
+      - run:
+          name: Installing npm deps
+          command: 'npm install'
+      - save_cache: # special step to save the dependency cache
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths: ./node_modules
+      - run:
+          name: make directory & ng lint
+          command: 'mkdir -p /tmp/logs'
+      - run:
+          name: Executing test cases
+          command: 'npm run test-with-coverage | tee /tmp/logs/test_cases.log'
+      - run:
+          name: install sonar scanner
+          command: npm install -g sonarqube-scanner
+      - run:
+         name: run sonar scanner
+         command: 'cd ~/program-service/src && sonar-scanner'
+orbs:
+  node: circleci/node@4.1.0
 # Orchestrate our job run sequence
 workflows:
   version: 2
   build_and_test:
     jobs:
-      - build    
-      #~ - test
+      - test
