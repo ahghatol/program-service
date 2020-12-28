@@ -17,6 +17,8 @@ jobs:
       - run:
           name: Installing npm
           command: 'npm i npm@latest -g'
+      - node/install:
+          install-yarn: true
       - run: node --version
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
@@ -41,6 +43,8 @@ jobs:
       - run:
          name: run sonar scanner
          command: 'cd ~/program-service/src && sonar-scanner'
+orbs:
+  node: circleci/node@13.10
 # Orchestrate our job run sequence
 workflows:
   version: 2
