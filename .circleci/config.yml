@@ -8,8 +8,9 @@ jobs:
   test:
     working_directory: ~/program-service/src
     docker:
-      - image: sunbird/build:player
+      - image: cimg/node:13.14.0
     steps:
+      - run: node --version
       - checkout:
           path: ~/program-service
       - run: git submodule sync
@@ -17,8 +18,8 @@ jobs:
       #~ - run:
           #~ name: Installing npm
           #~ command: 'npm i npm@latest -g'
-      - node/install:
-          install-yarn: true
+      #~ - node/install:
+          #~ install-yarn: true
       - run: node --version
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
