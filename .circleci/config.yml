@@ -8,18 +8,10 @@ jobs:
   test:
     working_directory: ~/program-service/src
     docker:
-      - image: cimg/node:13.14.0
+      - image: sunbird/build:player
     steps:
       - checkout:
           path: ~/program-service
-      - run: git submodule sync
-      - run: git submodule update --init
-      #~ - run:
-          #~ name: Installing npm
-          #~ command: 'npm i npm@latest -g'
-      #~ - node/install:
-          #~ install-yarn: true
-      - run: node --version
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
@@ -43,11 +35,10 @@ jobs:
       - run:
          name: run sonar scanner
          command: 'cd ~/program-service/src && sonar-scanner'
-orbs:
-  node: circleci/node@4.1.0
+
 # Orchestrate our job run sequence
 workflows:
-  version: 2
   build_and_test:
     jobs:
+      - build
       - test
