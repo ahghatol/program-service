@@ -19,6 +19,8 @@ jobs:
           command: 'npm i npm@latest -g'
       - node/install:
           install-yarn: true
+      - run: nvm ls
+      - run: nvm use 15
       - run: node --version
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
@@ -28,7 +30,6 @@ jobs:
       - run:
           name: Installing npm deps
           command: 'npm install'
-      - run: nvm ls
       - save_cache: # special step to save the dependency cache
           key: dependency-cache-{{ checksum "package.json" }}
           paths: ./node_modules
