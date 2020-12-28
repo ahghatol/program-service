@@ -12,8 +12,8 @@ jobs:
     steps:
       - checkout:
           path: ~/program-service
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+      #~ - restore_cache:
+          #~ key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: Remove Package Lock
           command: 'rm -f package-lock.json' 
