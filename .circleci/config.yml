@@ -14,6 +14,7 @@ jobs:
           path: ~/program-service
       - run: git submodule sync
       - run: git submodule update --init
+      - run: node --version
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
@@ -37,9 +38,6 @@ jobs:
       - run:
          name: run sonar scanner
          command: 'cd ~/program-service/src && sonar-scanner'
-
-orbs:
-  node: circleci/node@13.10.1
 # Orchestrate our job run sequence
 workflows:
   build_and_test:
