@@ -51,8 +51,4 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - test:
-          matrix:
-            parameters:
-              version:
-                - 13.11.0
+      - test
