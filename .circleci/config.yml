@@ -15,6 +15,7 @@ jobs:
           password: pw4amolg123  # context / project UI env-var reference
         environment:
           POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: pw4ttpllt043
           POSTGRES_DB: sunbird_programs
     steps:
       - checkout:
@@ -22,6 +23,7 @@ jobs:
       - run: git submodule sync
       - run: git submodule update --init
       - run: node --version
+      - run: sudo docker ps
       - run:
           name: Waiting for Postgres to be ready
           command: |
