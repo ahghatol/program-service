@@ -6,6 +6,7 @@ CREATE TABLE program
     name character varying COLLATE pg_catalog."default",
     description text COLLATE pg_catalog."default",
     content_types text[] COLLATE pg_catalog."default",
+    target_collection_category text[] COLLATE pg_catalog."default",
     collection_ids text[] COLLATE pg_catalog."default",
     type programtype,
     startdate timestamp without time zone DEFAULT timezone('utc'::text, (CURRENT_DATE)::timestamp with time zone),
