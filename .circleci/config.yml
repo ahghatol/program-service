@@ -34,7 +34,10 @@ jobs:
             echo Failed waiting for Postgres && exit 1
       - run:
           name: Install PSQL CLI; Import dummy data; run an example query
-          command: psql -u postgres sunbird_programs < sql-data/dummy.sql
+          command: |
+              sudo apt-get update 
+              sudo apt-get install postgresql-client
+              psql -u postgres sunbird_programs < sql-data/dummy.sql
       - run:
           name: Remove Package Lock
           command: 'rm -f package-lock.json'
