@@ -22,8 +22,6 @@ jobs:
           path: ~/program-service
       - run: git submodule sync
       - run: git submodule update --init
-      - run: node --version
-      - run: sudo docker ps
       - run:
           name: Waiting for Postgres to be ready
           command: |
@@ -37,9 +35,9 @@ jobs:
       - run:
           name: Install PSQL CLI; Import dummy data; run an example query
           command: |
-              sudo apt-get update 
+              sudo apt-get update
               sudo apt-get install postgresql-client
-              psql -U postgres sunbird_programs < sql-data/dummy.sql
+              psql -U postgres -h localhost -d sunbird_programs < sql-data/dummy.sql
       - run:
           name: Remove Package Lock
           command: 'rm -f package-lock.json'
