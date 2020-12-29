@@ -23,6 +23,20 @@ jobs:
       - run: git submodule update --init
       - run: node --version
       - run:
+          name: Waiting for Postgres to be ready
+          command: |
+            for i in `seq 1 10`;
+            do
+              nc -z localhost 5432 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for Postgres && exit 1
+      - run:
+          name: Install PSQL CLI; Import dummy data; run an example query
+          command: |
+            psql -u postgres sunbird_programs < sql-data/dummy.sql"
+      - run:
           name: Remove Package Lock
           command: 'rm -f package-lock.json'
       - run:
