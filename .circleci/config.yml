@@ -37,7 +37,7 @@ jobs:
           command: |
               sudo apt-get update 
               sudo apt-get install postgresql-client
-              psql -u postgres sunbird_programs < sql-data/dummy.sql
+              psql -U postgres sunbird_programs < sql-data/dummy.sql
       - run:
           name: Remove Package Lock
           command: 'rm -f package-lock.json'
