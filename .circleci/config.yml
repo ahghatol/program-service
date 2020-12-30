@@ -57,7 +57,7 @@ jobs:
           name: install sonar scanner
           command: | 
               sudo npm install -g sonarqube-scanner
-              sonar-scanner
+              cd ../ && sonar-scanner
 
 # Orchestrate our job run sequence
 workflows:
