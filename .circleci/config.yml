@@ -55,7 +55,7 @@ jobs:
           command: 'npm run test-with-coverage | tee /tmp/logs/test_cases.log'
       - run:
           name: install sonar scanner
-          command: npm install -g sonarqube-scanner
+          command: npm install sonarqube-scanner
       - run:
          name: run sonar scanner
          command: 'cd ~/program-service/src && sonar-scanner'
