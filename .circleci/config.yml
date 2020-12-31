@@ -10,9 +10,9 @@ jobs:
     docker:
       - image: cimg/node:13.10.0
       - image: circleci/postgres:9.6-alpine
-        auth:
-          username: ahghatol
-          password: pw4amolg123  # context / project UI env-var reference
+        #~ auth:
+          #~ username: ahghatol
+          #~ password: pw4amolg123  # context / project UI env-var reference
         environment:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: pw4ttpllt043
