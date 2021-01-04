@@ -16,8 +16,8 @@ const envVariables = {
     config: {
         user: process.env.sunbird_program_db_user || "postgres",
         host: process.env.sunbird_program_db_host || "localhost",
-        database: process.env.sunbird_program_db_name || 'sunbird_programs',
-        password: process.env.sunbird_program_db_password || 'pw4ttpllt043',
+        database: process.env.sunbird_program_db_name,
+        password: process.env.sunbird_program_db_password,
         port: process.env.sunbird_program_db_port || 5432,
         dialect: process.env.sunbird_program_db_dialect || "postgres",
         pool: {
