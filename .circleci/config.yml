@@ -34,7 +34,7 @@ jobs:
           command: |
               sudo apt-get update
               sudo apt-get install postgresql-client
-              psql -U ${POSTGRES_USER} -h localhost --dbname=${POSTGRES_DB} < sql-data/dummy.sql
+              psql -U ${POSTGRES_USER} -h localhost --dbname=$POSTGRES_DB < sql-data/dummy.sql
       - run:
           name: Remove Package Lock
           command: 'rm -f package-lock.json'
