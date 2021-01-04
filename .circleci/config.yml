@@ -30,6 +30,22 @@ jobs:
             done
             echo Failed waiting for Postgres && exit 1
       - run:
+          name: ENV VAR 1
+          command: echo $POSTGRES_USER;
+      - run:
+          name: ENV VAR 2
+          command: |
+                echo "POSTGRES_USER" $POSTGRES_USER
+                echo "POSTGRES_DB" $POSTGRES_DB
+      - run:
+          name: ENV VAR 3
+          command: |
+                echo "POSTGRES_USER" ${POSTGRES_USER}
+                echo "POSTGRES_DB" ${POSTGRES_DB}
+      - run:
+          name: ENV VAR 4
+          command: echo ${POSTGRES_DB}
+      - run:
           name: Install PSQL CLI; Import dummy data; run an example query
           command: |
               sudo apt-get update
