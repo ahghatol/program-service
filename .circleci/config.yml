@@ -32,8 +32,6 @@ jobs:
           command: |
               sudo apt-get update
               sudo apt-get install postgresql-client
-              psql -h localhost -c "create user $sunbird_program_db_user with password '$sunbird_program_db_password';"
-              psql -U $sunbird_program_db_user -h localhost -d postgres -c "CREATE DATABASE $sunbird_program_db_name"
               psql -U $sunbird_program_db_user -h localhost -d $sunbird_program_db_name < sql-data/dummy.sql
       - run:
           name: Remove Package Lock
