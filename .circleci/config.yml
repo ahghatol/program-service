@@ -40,7 +40,7 @@ jobs:
           name: make directory & ng lint
           command: 'mkdir -p /tmp/logs'
       - run:
-          name: Executing test cases
+          name: Executing testcases
           command: 'npm run test-with-coverage | tee /tmp/logs/test_cases.log'
       - run:
           name: Run sonar scanner
