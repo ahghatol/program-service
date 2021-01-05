@@ -10,10 +10,10 @@ jobs:
     docker:
       - image: cimg/node:13.10.0
       - image: circleci/postgres:9.6-alpine
-        environment:
-          POSTGRES_USER: $POSTGRES_USER
-          POSTGRES_PASSWORD: $POSTGRES_PASSWORD
-          POSTGRES_DB: $POSTGRES_DB
+        #~ environment:
+          #~ POSTGRES_USER: $POSTGRES_USER
+          #~ POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+          #~ POSTGRES_DB: $POSTGRES_DB
     steps:
       - checkout:
           path: ~/program-service
@@ -29,22 +29,6 @@ jobs:
               sleep 1
             done
             echo Failed waiting for Postgres && exit 1
-      - run:
-          name: ENV VAR 1
-          command: echo $POSTGRES_USER;
-      - run:
-          name: ENV VAR 2
-          command: |
-                echo "POSTGRES_USER" $POSTGRES_USER
-                echo "POSTGRES_DB" $POSTGRES_DB
-      - run:
-          name: ENV VAR 3
-          command: |
-                echo "POSTGRES_USER" ${POSTGRES_USER}
-                echo "POSTGRES_DB" ${POSTGRES_DB}
-      - run:
-          name: ENV VAR 4 trail
-          command: echo ${POSTGRES_DB}
       - run:
           name: Install PSQL CLI; Import dummy data; run an example query
           command: |
