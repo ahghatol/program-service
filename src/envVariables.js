@@ -14,10 +14,10 @@ const envVariables = {
     DOCK_REDIS_PORT: process.env.dock_redis_port || 6379,
     SUNBIRD_AUTO_CREATION_TOPIC: process.env.sunbird_auto_creation_topic,
     config: {
-        user: process.env.sunbird_program_db_user || process.env.POSTGRES_USER,
+        user: process.env.sunbird_program_db_user,
         host: process.env.sunbird_program_db_host || "localhost",
-        database: process.env.sunbird_program_db_name || process.env.POSTGRES_DB,
-        password: process.env.sunbird_program_db_password || process.env.POSTGRES_PASSWORD,
+        database: process.env.sunbird_program_db_name,
+        password: process.env.sunbird_program_db_password,
         port: process.env.sunbird_program_db_port || 5432,
         dialect: process.env.sunbird_program_db_dialect || "postgres",
         pool: {
