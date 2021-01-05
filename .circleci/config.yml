@@ -43,7 +43,7 @@ jobs:
                 echo "POSTGRES_USER" ${POSTGRES_USER}
                 echo "POSTGRES_DB" ${POSTGRES_DB}
       - run:
-          name: ENV VAR 4
+          name: ENV VAR 4 trail
           command: echo ${POSTGRES_DB}
       - run:
           name: Install PSQL CLI; Import dummy data; run an example query
