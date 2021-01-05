@@ -1,19 +1,10 @@
 version: 2.1
 jobs:
-  build:
-    machine:
-      image: circleci/classic:latest
-    steps:
-      - checkout
-  test:
+  testcases:
     working_directory: ~/program-service/src
     docker:
       - image: cimg/node:13.10.0
       - image: circleci/postgres:9.6-alpine
-        #~ environment:
-          #~ POSTGRES_USER: $POSTGRES_USER
-          #~ POSTGRES_PASSWORD: $POSTGRES_PASSWORD
-          #~ POSTGRES_DB: $POSTGRES_DB
     steps:
       - checkout:
           path: ~/program-service
@@ -30,10 +21,11 @@ jobs:
             done
             echo Failed waiting for Postgres && exit 1
       - run:
-          name: Install PSQL CLI; Import dummy data; run an example query
+          name: Install PSQL CLI; Import dummy data;
           command: |
               sudo apt-get update
               sudo apt-get install postgresql-client
+              psql -U $POSTGRES_USER -h localhost -d postgres -c "CREATE DATABASE $POSTGRES_DB"
               psql -U $POSTGRES_USER -h localhost -d $POSTGRES_DB < sql-data/dummy.sql
       - run:
           name: Remove Package Lock
@@ -60,5 +52,4 @@ jobs:
 workflows:
   build_and_test:
     jobs:
-      # - build
-      - test
+      - testcases
