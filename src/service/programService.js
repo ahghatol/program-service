@@ -1923,12 +1923,12 @@ async function getUserList(req, response) {
     const orgOsid = _.get(_.first(_.get(orgApiResp.data, 'result.Org')), 'osid');
 
     // Get users associated to org
-    const orgUserListResp = await registryService.getOrgUserList(orgOsid);
-    const userOsIds = _.map(_.get(orgUserListResp.data, 'result.User_Org'), e => e.userId);
+    const orgUserListApiResp = await registryService.getOrgUserList(orgOsid);
+    const userOsIds = _.map(_.get(orgUserListApiResp.data, 'result.User_Org'), e => e.userId);
 
     // Get users list
-    const userListResp = await registryService.getUserList(userOsIds);
-    const userList = _.get(userListResp.data, 'result.User');
+    const userListApiResp = await registryService.getUserList(userOsIds);
+    const userList = _.get(userListApiResp.data, 'result.User');
 
     return response.status(200).send(successResponse({
       apiId: 'api.user.list.read',
