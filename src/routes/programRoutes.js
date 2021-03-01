@@ -82,7 +82,7 @@ module.exports = function (app) {
       programService.getUserDetailsAPI)
 
   app.route(BASE_URL + '/user/list')
-    .get(requestMiddleware.gzipCompression(), requestMiddleware.createAndValidateRequestBody,
+    .post(requestMiddleware.gzipCompression(), requestMiddleware.createAndValidateRequestBody,
       programService.getUserListAPI)
 
   app.route(BASE_URL + '/collection/copy')

@@ -42,6 +42,9 @@ const cacheManager_programReport = new SbCacheManager({ ttl: 86400 });
 const registryService = new RegistryService()
 const hierarchyService = new HierarchyService()
 
+const UserService = require('./userService');
+const userService = new UserService();
+
 function getProgram(req, response) {
   const logObject = {
     traceId: req.headers['x-request-id'] || '',
@@ -1915,30 +1918,70 @@ function getOrgDetails(req, orgList) {
 }
 
 async function getUserList(req, response) {
-  // @Todo request data validation
-  try {
-    // Get org osid
-    const dikshaOrgId = _.get(req.body.request, 'filters.orgId');
-    const orgApiResp = await registryService.getOrgDetails(dikshaOrgId);
-    const orgOsid = _.get(_.first(_.get(orgApiResp.data, 'result.Org')), 'osid');
+  var data = req.body;
+  var rspObj = req.rspObj;
+  const logObject = {
+    traceId: req.headers['x-request-id'] || '',
+    message: programMessages.USER.LIST.INFO
+  }
+  loggerService.entryLog(data, logObject);
+  const errCode = programMessages.USER.LIST.EXCEPTION_CODE;
+  rspObj.errCode = programMessages.USER.LIST.MISSING_CODE;
+  rspObj.errMsg = programMessages.USER.LIST.MISSING_MESSAGE;
+  rspObj.responseCode = responseCode.CLIENT_ERROR;
+  if (!data || !data.request || !data.request.filters || !data.request.filters.User_Org || !data.request.filters.User_Org.orgId) {
+    loggerService.exitLog({ responseCode: rspObj.responseCode }, logObject);
+    loggerError('', rspObj, errCode + errorCodes.CODE1);
+    return response.status(400).send(errorResponse(rspObj, errCode + errorCodes.CODE1))
+  }
 
+  try {
     // Get users associated to org
-    const orgUserListApiResp = await registryService.getOrgUserList(orgOsid);
-    const userOsIds = _.map(_.get(orgUserListApiResp.data, 'result.User_Org'), e => e.userId);
+    const userOrgFilters = _.get(data.request, 'filters.User_Org');
+    const roles = _.get(data.request, 'filters.User_Org.roles');
+
+    const orgUserListResp = await registryService.getOrgUserList(userOrgFilters);
+    const orgUserList = _.get(orgUserListResp, 'result');
+    const userOsIds = _.uniq(_.map(orgUserList, e => e.userId));
 
     // Get users list
     const userListApiResp = await registryService.getUserList(userOsIds);
     const userList = _.get(userListApiResp.data, 'result.User');
+
+    // Get Diksha user profiles
+    const dikshaUserIdentifier = _.uniq(_.map(userList, e => e.userId));
+    const dikshaUserProfilesApiResp = await userService.getDikshaUserProfiles(req, dikshaUserIdentifier);
+    let orgUsersDetails = _.get(dikshaUserProfilesApiResp.data, 'result.response.content');
+
+    // Attach os user object details to diksha user profile
+    if (!_.isEmpty(orgUsersDetails)) {
+      orgUsersDetails = _.map(
+        _.filter(orgUsersDetails, obj => { if (obj.identifier) { return obj; } }),
+        (obj) => {
+          if (obj.identifier) {
+            const tempUserObj = _.find(userList, { 'userId': obj.identifier });
+            obj.name = `${ obj.firstName } ${ obj.lastName || '' }`;
+            obj.User = _.find(userList, { 'userId': obj.identifier });
+            obj.User_Org = _.find(orgUserList, { 'userId': _.get(tempUserObj, 'osid') });
+            obj.selectedRole = _.first(_.intersection(roles, obj.User_Org.roles));
+            return obj;
+          }
+        });
+    }
 
     return response.status(200).send(successResponse({
       apiId: 'api.user.list.read',
       ver: '1.0',
       msgid: uuid(),
       responseCode: 'OK',
-      result: userList
-    }))
+      result: {
+        'content': orgUsersDetails,
+        'count': _.get(orgUserListResp, 'count')
+      }
+    }));
   }
   catch (err) {
+    logger.error("Error while parsing for user lists")
     return response.status(400).send(errorResponse({
       apiId: 'api.user.list.read',
       ver: '1.0',

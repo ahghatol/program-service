@@ -1,14 +1,14 @@
 const envVariables = require('../envVariables')
 const registryUrl = envVariables['OPENSABER_SERVICE_URL']
 const axios = require('axios');
-
+const _ = require("lodash");
 
 class RegistryService {
 
   constructor () {
   }
 
-  async getOrgDetails(dikshaOrgId) {
+  async getOrgDetails(orgFilters) {
     const option = {
       url: registryUrl + '/search',
       method: 'post',
@@ -18,7 +18,7 @@ class RegistryService {
         "request": {
           "entityType": ["Org"],
           "filters": {
-            "orgId": { "eq": dikshaOrgId }
+            ...orgFilters
           }
         }
       }
@@ -44,7 +44,7 @@ class RegistryService {
     return axios(option);
   }
 
-  async getOrgUserList(orgId) {
+  async getOrgUserList(filters) {
     const option = {
       url: registryUrl + '/search',
       method: 'post',
@@ -54,14 +54,27 @@ class RegistryService {
         "request": {
           "entityType": ["User_Org"],
           "filters": {
-            "orgId": { "eq": orgId }
+            ..._.pick(filters, 'orgId')
           },
-          "limit": 250,
-          "offset": 0
+          "limit": _.get(filters, 'limit') || 250,
+          "offset": _.get(filters, 'offset') || 0
         }
       }
     };
-    return axios(option);
+
+    const orgApiRes = await axios(option);
+    const roles = _.get(filters, 'roles');
+    const filteredList = _.filter(_.get(orgApiRes, 'data.result.User_Org'), obj => {
+      const isHavingRoles = _.intersection(roles, obj.roles);
+      if (isHavingRoles.length > 0) {
+        return obj
+      }
+    });
+
+    return {
+      "result": filteredList,
+      "count": _.get(orgApiRes, 'data.result.User_Org').length
+    };
   }
 
   addRecord(value, callback) {
